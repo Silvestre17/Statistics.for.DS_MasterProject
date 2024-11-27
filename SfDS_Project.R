@@ -157,15 +157,20 @@ missing_migrants_clean %>%
 # ------------------------------------
 ### Data Cleaning ###
 
-# Uniformize the values of the "Incident Type" variable - "Incident", "Split Incident", "Cumulative Incident"
-unique(missing_migrants_clean$`Incident Type`)
-
-# "Incident,Split Incident" -> "Split Incident"
-missing_migrants_clean$`Incident Type` <- gsub("Incident,Split Incident", "Split Incident", missing_migrants_clean$`Incident Type`)
-missing_migrants_clean$`Incident Type` <- as.factor(missing_migrants_clean$`Incident Type`)
-unique(missing_migrants_clean$`Incident Type`)
-
 # Uniformize the values of the "Country of Origin" NA values ("Unknown")
 missing_migrants_clean$`Country of Origin` <- ifelse(is.na(missing_migrants_clean$`Country of Origin`), "Unknown", missing_migrants_clean$`Country of Origin`)
 
+# Value counts (n & %) for the "Cause of Death" variable
+missing_migrants_clean %>%
+  count(`Cause of Death`, sort = TRUE) %>%
+  mutate(percentage = round(n / sum(n) * 100, 1)) %>%
+  as.data.frame()
 
+
+
+# ------------------------------------
+### Data Visualization ###
+# Source: https://www.kaggle.com/code/akyabahmed/maping-global-missing-migrants/notebook
+
+# MAPA
+# Polar Charts
