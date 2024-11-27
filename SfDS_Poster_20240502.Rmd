@@ -4,9 +4,6 @@ author:
   - name: 'André Silvestre'
     affil: 20240502
     main: true
-  - name: 'Filipa Pereira'
-    affil: 20240509
-    main: true
   - name: 'Umeima Mahomed'
     affil: 20240543
     main: true
