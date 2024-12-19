@@ -226,7 +226,7 @@ missing_migrants_clean <- missing_migrants_clean %>%
 
 # n-1 Dummy variables for the "Cause of Death" variable (n = 7 & -1 = "Mixed or unknown")
 
-# Rename 'Incident Year' -> 'Incident_Year'
+# Rename variables with underscore, ex: 'Incident Year' -> 'Incident_Year'
 names(missing_migrants_clean) <- gsub(" ", "_", names(missing_migrants_clean))
 
 # Remove duplicated rows
@@ -268,9 +268,10 @@ missing_migrants_clean_gb <- na.omit(missing_migrants_clean_gb)
 
 
 # ------------------------------------
-# ### Painel Data ###
+# ### Panel Data ###
 
-# Question 1: What are the factors that influence the number of deaths and missing children in migrant incidents?
+# Question 1: What are the factors that influence the total number of 
+# deaths and missing children in migrant incidents across regions and time?
 
 # Dependent Variable: log(Number of Children + 1)
 # Independent Variables: log(Number of Females + 1), 
