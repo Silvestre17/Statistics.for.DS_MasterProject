@@ -172,6 +172,127 @@ missing_migrants_clean %>%
 
 
 # ------------------------------------
+### Data Visualization ###
+# Source: https://www.kaggle.com/code/akyabahmed/maping-global-missing-migrants/notebook
+
+# Prepare the data
+map_data_clean <- missing_migrants_clean %>%
+  filter(!is.na(`Coordinates`)) %>%
+  mutate(
+    lat = as.numeric(sub(",.*", "", `Coordinates`)), # Extract latitude
+    lon = as.numeric(sub(".*,", "", `Coordinates`)), # Extract longitude
+    year = `Incident Year`,
+    YearMonth = paste(`Incident Year`, `Month`) # Create YearMonth variable
+  )
+
+# Order the YearMonth field
+map_data_clean <- map_data_clean %>%
+  mutate(
+    # Create a DateOrder field to ensure proper ordering
+    DateOrder = as.Date(paste(`Incident Year`, `Month`, "01", sep = " "), format = "%Y %B %d"),
+    YearMonth = factor(YearMonth, levels = unique(YearMonth[order(DateOrder)])) # Order YearMonth by DateOrder
+  )
+
+# Check the ordered levels
+levels(map_data_clean$YearMonth)
+
+# Load world map data
+world <- map_data("world")
+
+# Create the animated map
+map_animation <- ggplot() +
+  geom_polygon(
+    data = world,
+    aes(x = long, y = lat, group = group),
+    fill = "lightgray", color = "white", linewidth = 0.1
+  ) +
+  coord_map(xlim = c(-100, 50), ylim = c(0, 55)) +
+  geom_point(
+    data = map_data_clean,
+    aes(
+      x = lon, y = lat,
+      color = `Total Number of Dead and Missing`,
+      size = `Total Number of Dead and Missing` * 20
+    ),
+    alpha = 0.8
+  ) +
+  scale_color_gradient(low = "lightpink", high = "darkred", name = "Total Dead & Missing") +
+  scale_size_continuous(range = c(1, 15), name = "") +
+  labs(
+    title = "Global Missing Migrants Incidents by Year and Month",
+    subtitle = "Year-Month: {closest_state}",
+    x = "Longitude", y = "Latitude"
+  ) +
+  theme_minimal() +
+  theme(
+    plot.title = element_text(face = "bold", size = 18),
+    legend.position = "bottom",
+    plot.subtitle = element_text(size = 14, face = "bold"),
+    axis.text = element_text(size = 10),
+    axis.title = element_text(size = 12)
+  ) +
+  transition_states(YearMonth, transition_length = 2, state_length = 1)
+
+
+# Calculate the number of frames
+n_years <- max(map_data_clean$year) - min(map_data_clean$year) + 1
+n_frames <- n_years * 12
+
+# Save the plot as a GIF
+gganimate::anim_save("map_animation.gif", 
+                     animation = map_animation, 
+                     nframes = n_frames,
+                     fps = 5,
+                     width = 1280, height = 720, 
+                     dpi = 500)
+
+# ------------------------------------
+### Polar Charts ###
+
+# Aggregate data for polar charts by year
+polar_data <- missing_migrants_clean %>%
+  group_by(`Incident Year`) %>%
+  summarise(
+    Deaths = sum(`Number of Dead`, na.rm = TRUE),
+    Missing = sum((`Total Number of Dead and Missing` - `Number of Dead`), na.rm = TRUE),
+    Survivors = sum(`Number of Survivors`, na.rm = TRUE),
+    Incidents = n()
+  ) %>%
+  pivot_longer(
+    cols = -`Incident Year`,
+    names_to = "Category",
+    values_to = "Count"
+  )
+
+# Create polar charts with facets for each category
+polar_plot <- ggplot(polar_data, aes(x = as.factor(`Incident Year`), y = Count, fill = as.factor(`Incident Year`))) +
+  geom_bar(stat = "identity", width = 1, color = "white", alpha = 0.8) +
+  coord_polar(theta = "x") +
+  
+  # Custom color palette
+  scale_fill_manual(
+    values = colorRampPalette(c("darkred", "red", "lightcoral"))(length(unique(polar_data$`Incident Year`))),
+    guide = "none" # Removes the legend
+  ) +
+  labs(
+    title = "Polar Charts of Migrant Incidents Over Years",
+    subtitle = "Distribution of Deaths, Missing, Survivors, and Incidents by Year\n",
+    x = NULL, y = NULL
+  ) +
+  facet_wrap(~ Category, ncol = 2, scales = "free_y") +
+  theme_minimal() +
+  theme(
+    strip.text = element_text(size = 12, face = "bold"),                     # Bold category titles
+    plot.title = element_text(size = 16, face = "bold", hjust = 0.5),        # Center title
+    plot.subtitle = element_text(size = 12, hjust = 0.5),                    # Center subtitle
+    axis.text.x = element_text(size = 10, face = "bold"),                    # Bold axis text
+    legend.position = "none"                                                 # Removes the legend entirely
+  )
+
+# Display the polar charts
+polar_plot
+
+# ------------------------------------
 ### Data Cleaning ###
 
 # Uniformize the values of the "Country of Origin" NA values ("Unknown")
@@ -261,6 +382,12 @@ missing_migrants_clean_gb <- missing_migrants_clean %>%
     Violence = first(Violence)
   ) %>%
   ungroup()
+
+# Check if there are any duplicated rows
+sum(duplicated(missing_migrants_clean_gb))
+
+# Check for NAs
+sum(is.na(missing_migrants_clean_gb))
 
 # Remove NAs
 missing_migrants_clean_gb <- na.omit(missing_migrants_clean_gb)
