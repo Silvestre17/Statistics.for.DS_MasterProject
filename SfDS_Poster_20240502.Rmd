@@ -34,6 +34,8 @@ csl: apa.csl
 link-citations: true
 columnline_col: "#fff"
 columnline_width: 0mm
+knit: pagedown::chrome_print   # to print the poster to pdf
+
 
 ---
 
@@ -501,9 +503,7 @@ missing_migrants_clean_gb <- na.omit(missing_migrants_clean_gb)
 
 # Pooled OLS
 pooled_ols <- lm(log(Number_of_Children + 1) ~ log(Number_of_Females + 1) + 
-                   log(Number_of_Males + 1) + log(Number_of_Survivors + 1) + 
-                    Drowning + Environmental_Conditions + 
-                   Sickness + Vehicle_Accident + Violence,
+                   log(Number_of_Males + 1) + log(Number_of_Survivors + 1) + Drowning,
                  data = missing_migrants_clean_gb)
 summary(pooled_ols)
 
@@ -512,9 +512,7 @@ bp_test_pooled <- bptest(pooled_ols)
 
 # Estimate the model by random effects
 random_effects <- plm(log(Number_of_Children + 1) ~ log(Number_of_Females + 1) + 
-                        log(Number_of_Males + 1) + log(Number_of_Survivors + 1) + 
-                            Drowning + Environmental_Conditions + 
-                        Sickness + Vehicle_Accident + Violence,
+                        log(Number_of_Males + 1) + log(Number_of_Survivors + 1) + Drowning,
                       data = missing_migrants_clean_gb, 
                       index = c("Region_of_Incident", "Incident_Date"),
                       model = "random")
@@ -525,10 +523,7 @@ bp_test_random <- bptest(random_effects)
 
 # Estimate the model by fixed effects
 fixed_effects <- plm(log(Number_of_Children + 1) ~ log(Number_of_Females + 1) + 
-                       log(Number_of_Males + 1) + log(Number_of_Survivors + 1) + 
-                       Drowning + Environmental_Conditions + 
-                       Sickness + Vehicle_Accident + Violence,
-                     data = missing_migrants_clean_gb, 
+                       log(Number_of_Males + 1) + log(Number_of_Survivors + 1) + Drowning, 
                      index = c("Region_of_Incident", "Incident_Date"),
                      model = "within")
 summary(fixed_effects)
@@ -579,7 +574,7 @@ test_results$P_Value <- sprintf("%.4g", test_results$P_Value)
 knitr::kable(test_results, 
              format = "html", 
              caption = "Results of Statistical Tests", 
-             align = "c", col.names = c("Test", "P_Value", "H0", "Conclusion"), 
+             align = "c", col.names = c("Test", "p-value", "H0", "Conclusion"), 
              escape = TRUE)
 ```
 
@@ -587,30 +582,30 @@ knitr::kable(test_results,
 # Extraindo os resultados dos modelos
 model_results <- data.frame(
   Model = c("Pooled OLS", "Fixed Effects", "Random Effects", "Robust Pooled", "Robust Fixed Effects", "Robust Random Effects"),
-  Females = c(summary(pooled_ols)$coefficients["log(Number_of_Females + 1)", "Pr(>|t|)"],
-           summary(fixed_effects)$coefficients["log(Number_of_Females + 1)", "Pr(>|t|)"],
-           summary(random_effects)$coefficients["log(Number_of_Females + 1)", "Pr(>|z|)"],
-           pooled_ols_robust["log(Number_of_Females + 1)", "Pr(>|t|)"],
-           fixed_effects_robust["log(Number_of_Females + 1)", "Pr(>|t|)"],
-           random_effects_robust["log(Number_of_Females + 1)", "Pr(>|t|)"]),
-  Males = c(summary(pooled_ols)$coefficients["log(Number_of_Males + 1)", "Pr(>|t|)"],
-             summary(fixed_effects)$coefficients["log(Number_of_Males + 1)", "Pr(>|t|)"],
-             summary(random_effects)$coefficients["log(Number_of_Males + 1)", "Pr(>|z|)"],
-             pooled_ols_robust["log(Number_of_Males + 1)", "Pr(>|t|)"],
-             fixed_effects_robust["log(Number_of_Males + 1)", "Pr(>|t|)"],
-             random_effects_robust["log(Number_of_Males + 1)", "Pr(>|t|)"]),
-  Survivors = c(summary(pooled_ols)$coefficients["log(Number_of_Survivors + 1)", "Pr(>|t|)"],
-                summary(fixed_effects)$coefficients["log(Number_of_Survivors + 1)", "Pr(>|t|)"],
-                summary(random_effects)$coefficients["log(Number_of_Survivors + 1)", "Pr(>|z|)"],
-                pooled_ols_robust["log(Number_of_Survivors + 1)", "Pr(>|t|)"],
-                fixed_effects_robust["log(Number_of_Survivors + 1)", "Pr(>|t|)"],
-                random_effects_robust["log(Number_of_Survivors + 1)", "Pr(>|t|)"]),
-  Drowning = c(summary(pooled_ols)$coefficients["Drowning", "Pr(>|t|)"],
-               summary(fixed_effects)$coefficients["Drowning", "Pr(>|t|)"],
-               summary(random_effects)$coefficients["Drowning", "Pr(>|z|)"],
-               pooled_ols_robust["Drowning", "Pr(>|t|)"],
-               fixed_effects_robust["Drowning", "Pr(>|t|)"],
-               random_effects_robust["Drowning", "Pr(>|t|)"])
+  Females = c(summary(pooled_ols)$coefficients["log(Number_of_Females + 1)", "Estimate"],
+           summary(fixed_effects)$coefficients["log(Number_of_Females + 1)", "Estimate"],
+           summary(random_effects)$coefficients["log(Number_of_Females + 1)", "Estimate"],
+           pooled_ols_robust["log(Number_of_Females + 1)", "Estimate"],
+           fixed_effects_robust["log(Number_of_Females + 1)", "Estimate"],
+           random_effects_robust["log(Number_of_Females + 1)", "Estimate"]),
+  Males = c(summary(pooled_ols)$coefficients["log(Number_of_Males + 1)", "Estimate"],
+             summary(fixed_effects)$coefficients["log(Number_of_Males + 1)", "Estimate"],
+             summary(random_effects)$coefficients["log(Number_of_Males + 1)", "Estimate"],
+             pooled_ols_robust["log(Number_of_Males + 1)", "Estimate"],
+             fixed_effects_robust["log(Number_of_Males + 1)", "Estimate"],
+             random_effects_robust["log(Number_of_Males + 1)", "Estimate"]),
+  Survivors = c(summary(pooled_ols)$coefficients["log(Number_of_Survivors + 1)", "Estimate"],
+                summary(fixed_effects)$coefficients["log(Number_of_Survivors + 1)", "Estimate"],
+                summary(random_effects)$coefficients["log(Number_of_Survivors + 1)", "Estimate"],
+                pooled_ols_robust["log(Number_of_Survivors + 1)", "Estimate"],
+                fixed_effects_robust["log(Number_of_Survivors + 1)", "Estimate"],
+                random_effects_robust["log(Number_of_Survivors + 1)", "Estimate"]),
+  Drowning = c(summary(pooled_ols)$coefficients["Drowning", "Estimate"],
+               summary(fixed_effects)$coefficients["Drowning", "Estimate"],
+               summary(random_effects)$coefficients["Drowning", "Estimate"],
+               pooled_ols_robust["Drowning", "Estimate"],
+               fixed_effects_robust["Drowning", "Estimate"],
+               random_effects_robust["Drowning", "Estimate"])
 )
 
 model_results$Females <- sprintf("%.3g", as.numeric(model_results$Females))
