@@ -1,5 +1,5 @@
 ---
-title: '**Tragedy Unseen: Unveiling the Factors Behind Migrant Deaths and Disappearances**'
+title: '**Tragedy Unseen:** Unveiling the Factors Behind Migrant Deaths and Disappearances'
 author:
   - name: 'André Silvestre'
     affil: 20240502
@@ -33,8 +33,7 @@ csl: apa.csl
 link-citations: true
 columnline_col: "#fff"
 columnline_width: 0mm
-# knit: pagedown::chrome_print   # to print the poster to pdf
-
+knit: pagedown::chrome_print   # to print the poster to pdf
 
 ---
 

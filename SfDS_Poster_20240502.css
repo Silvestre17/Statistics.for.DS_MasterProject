@@ -2,8 +2,14 @@
   height: calc(48in * 0.1) !important;
 }
 
+#title {
+  line-height: 0.8 !important;
+  margin-bottom: 20px !important;
+}
+
 .poster_title {
   align-content: center !important;
+  padding-top: 80px !important;
 }
 
 .logo_left {
