@@ -1,5 +1,5 @@
 ---
-title: '**Título bué fixe**'
+title: '**Tragedy Unseen: Unveiling the Factors Behind Migrant Deaths and Disappearances**'
 author:
   - name: 'André Silvestre'
     affil: 20240502
@@ -16,7 +16,6 @@ titletext_fontfamily: "Rasa"
 poster_height: 48in
 poster_width: 36in
 
-
 logoleft_name: './Logo-Nova-IMS-White.png'
 
 primary_colour:	  "#941a00"	 # Main colour used for poster design.
@@ -29,12 +28,12 @@ output:
     pandoc_args: --mathjax
     number_sections: TRUE
     css: "SfDS_Poster_20240502.css"
-bibliography: packages.bib
+bibliography: missingmigrants.bib
 csl: apa.csl
 link-citations: true
 columnline_col: "#fff"
 columnline_width: 0mm
-knit: pagedown::chrome_print   # to print the poster to pdf
+# knit: pagedown::chrome_print   # to print the poster to pdf
 
 
 ---
@@ -50,7 +49,6 @@ knitr::opts_chunk$set(echo = FALSE,
 options(knitr.table.format = "html") 
 
 # pagedown::chrome_print("myfile.Rmd") # to print the poster to pdf
-# install.packages("citr")             # to insert citations
 # https://github.com/brentthorne/posterdown/wiki/posterdown_html # to see more options
 ```
 
@@ -82,6 +80,7 @@ options(knitr.table.format = "html")
 # install.packages("mapproj")
 # install.packages("lmtest")
 # install.packages("plm")
+# install.packages("caTools")
 
 
 library(readxl)
@@ -98,6 +97,7 @@ library(gapminder)
 library(mapproj)
 library(lmtest)
 library(plm)
+library(caTools)
 
 # Load data
 missing_migrants <- read_excel("./Missing_Migrants_Global_Figures_allData.xlsx")
@@ -235,23 +235,23 @@ missing_migrants_clean %>%
 
 # Introduction
 
-Welcome to `posterdown` ! This is my attempt to provide a semi-smooth workflow for those who wish to take their R Markdown skills to the conference world. Most features from R Markdown are available in this package such as Markdown section notation, figure captioning, and even citations like this one [@R-rmarkdown]. The rest of this example poster will show how you can insert typical conference poster features into your own document. 
+Across the globe, the perilous journeys of migrants often lead to heartbreaking losses, a stark reminder of the human cost of migration. Each year, thousands of individuals vanish, leaving behind a legacy of unanswered questions and unacknowledged grief. This study seeks to explore the factors influencing these migrant deaths and disappearances, employing panel data analysis to understand how demographics and causes of death play a role in these tragedies. [@councilofeurope][@iomDecadeDocumenting] 
 
-## Objectives
+We begin by visualizing the distribution of migrant incidents over time using polar charts, followed by a spatial and temporal analysis through an animated global map. Subsequently, we delve into an econometric panel data analysis to further understand these grim statistics. [@R-posterdown]
 
-1. Easy to use reproducible poster design. 
-2. Integration with R Markdown.
-3. Easy transition from `posterdown` to `pagedown` report or manuscript documents [@R-pagedown].
+## Research question
 
-# Methods
+<center>**What are the factors that influence the total number of deaths and missing children in migrant incidents across regions and time?**</center>
 
-This package uses the same workflow approach as the R Markdown you know and love. Basically it goes from RMarkdown > Knitr > Markdown > Pandoc > HTML/CSS > PDF. You can even use the bibliography the same way [@R-posterdown].
+# Methodology
 
+We utilized data from the Missing Migrants Project provided by the IOM [@IOM_MissingMigrants]. The analysis begins by cleaning the data, filtering for incidents with a source quality of 4 or higher. 
 
+To visualize temporal trends, we created polar charts displaying deaths (**Figure** \@ref(fig:polarcharts)), missing persons, survivors, and total incidents across different years. Next, we visualized the spatial and temporal distribution of migrant incidents through an animated global map (**Figure** \@ref(fig:mapanimation)). 
 
-Maybe you want to show off some of that fancy code you spent so much time on to make that figure, well you can do that too! Just use the `echo=TRUE` option in the r code chunk options, Figure \@ref(fig:myprettycode)!
+For econometric analysis, we performed panel data regressions, including `Pooled OLS`, `Fixed Effects`, and `Random Effects` models, to identify factors influencing the number of deaths and missing children during migration incidents.
 
-```{r myprettycode, echo=FALSE, fig.cap='<span class="caption-text">Boxplots, message=FALSE, warning=FALSE, out.width="95%", so hot right now!</span>', fig.height=7}
+```{r polarcharts, echo=FALSE, fig.cap='<span class="caption-text">Polar Charts of Migrant Incidents Over Years. Distribution of Deaths, Missing, Survivors, and Incidents by Year.</span>', fig.height=6}
 # ------------------------------------
 ### Polar Charts ###
 
@@ -300,9 +300,11 @@ polar_plot
 ```
 
 
+The polar charts (**Figure** \@ref(fig:polarcharts)) reveal interesting temporal patterns. The number of deaths remains high between $2014$ and $2017$, decreasing in the following years. The number of missing persons also presents a similar pattern, but with a more volatile behavior. The survivor counts show a different behaviour, with an overall increase in later years. 
 
+The total number of incidents appears to have its maximum around $2017$ and decreases in the following years. These visualizations suggest that while the number of reported deaths and missing persons has decreased, the survival rates have shown improvements over the last few years.
 
-```{r eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
+```{r, eval=FALSE, message=FALSE, warning=FALSE, include=FALSE}
 ### Data Visualization ###
 # Source: https://www.kaggle.com/code/akyabahmed/maping-global-missing-migrants/notebook
 
@@ -380,9 +382,14 @@ gganimate::anim_save("map_animation.gif",
 ```
 
 
-![Animated Map](map_animation.gif){width=100%}
+```{r mapanimation, echo=FALSE, fig.cap='<span class="caption-text">Animated Global Map of Missing Migrants Incidents by Year and Month.</span>', fig.height=7}
+knitr::include_graphics("map_animation.gif")
+```
 
-How about a neat table of data? See, Table \@ref(tab:iristable):
+
+The animated map (**Figure** \@ref(fig:mapanimation)) effectively shows the geographical distribution of incidents over time. It highlights the **Mediterranean Sea** as a critical area for migrant deaths, with notable incidents occurring in **Central America** and along the borders between **Mexico and the United States**. 
+
+The animated map shows that these incidents are relatively constant over time, emphasizing the continuous danger migrants face along these migration routes.
 
 ```{r message=FALSE, warning=FALSE, include=FALSE}
 # ------------------------------------
@@ -550,28 +557,25 @@ fixed_effects_robust <- coeftest(fixed_effects, vcov = vcovHC(fixed_effects, typ
 fixed_effects_robust
 ```
 
-
 # Results
 
-Usually you want to have a nice table displaying some important results that you have calculated. In `posterdown` this is as easy as using the `kable` table formatting you are probably use to as per typical R Markdown formatting.
+The panel data analysis investigates the factors influencing the number of deaths and missing children, controlling for region and time. **Table** \@ref(tab:stattests) presents the results of key statistical tests, and **Table** \@ref(tab:modelresults) displays the estimation results for `Pooled OLS`, `Random Effects`, and `Fixed Effects` models, alongside their robust counterparts.
 
-You can reference tables like so: Table \@ref(tab:mytable). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam placerat augue at velit tincidunt semper. Donec elementum porta posuere. Nullam interdum, odio at tincidunt feugiat, turpis nisi blandit eros, eu posuere risus felis non quam. Nam eget lorem odio. Duis et aliquet orci. Phasellus nec viverra est.
-
-```{r}
+```{r stattests}
 # Statistics Test Table
 test_results <- data.frame(
   Test = c("Robust Hausman", "Breusch Pagan (Pooled OLS, Homosk.)", "Breusch Pagan (FE, Homosk.)", "Breusch Pagan (RE, Homosk.)"),
   P_Value = c(hausman_test$p.value, bp_test_pooled$p.value, bp_test_fixed$p.value, bp_test_random$p.value),
   H0 = c("use random effects", "Homosk.", "Homosk.", "Homosk."),
-  Conclusion = c(ifelse(hausman_test$p.value < 0.05, "use fixed effects", "use random effects"),
+  Conclusion = c(ifelse(hausman_test$p.value < 0.05, "use Fixed Effects", "use Random Effects"),
                 ifelse(bp_test_pooled$p.value < 0.05, "Heterosk.", "Homosk."),
                 ifelse(bp_test_fixed$p.value < 0.05, "Heterosk.", "Homosk."),
                 ifelse(bp_test_random$p.value < 0.05, "Heterosk.", "Homosk."))
 )
+# Convert p-values to scientific notation
+test_results$P_Value <- sprintf("%.2g", test_results$P_Value)
 
-# Convertendo os valores para caracteres para melhor formatação
-test_results$P_Value <- sprintf("%.4g", test_results$P_Value)
-
+# Table with the results of the statistical tests
 knitr::kable(test_results, 
              format = "html", 
              caption = "Results of Statistical Tests", 
@@ -579,7 +583,13 @@ knitr::kable(test_results,
              escape = TRUE)
 ```
 
-```{r}
+The `Robust Hausman test`, with a p-value of $0.308$, suggests that the `Random Effects` model is more appropriate than the Fixed Effects model for our analysis. The Breusch-Pagan tests indicate the presence of heteroskedasticity in all models ($p-value<0.05$), making robust standard errors essential.
+
+<br><br>
+
+
+
+```{r modelresults}
 # Função para adicionar os asteriscos de significância
 add_significance_stars <- function(estimate, p_value) {
   stars <- case_when(
@@ -588,7 +598,7 @@ add_significance_stars <- function(estimate, p_value) {
     p_value <= 0.05 ~ "*",
     TRUE ~ ""
   )
-  paste(sprintf("%.4f", estimate), stars)
+  paste(sprintf("%.3f", estimate), stars)
 }
 
 
@@ -629,8 +639,6 @@ model_results <- data.frame(
   )
 )
 
-
-
 # Criando a tabela com os resultados dos modelos
 knitr::kable(model_results, 
              format = "html", 
@@ -640,16 +648,22 @@ knitr::kable(model_results,
 ```
 
 
+**Table** \@ref(tab:modelresults) shows that the number of females and males involved in a migration incident are significant predictors of the number of children deaths and missing persons. The coefficient of $\text{log(Number_of_Females + 1)}$ shows a positive impact across all models. The $\text{log(Number_of_Males + 1)}$ also presents a positive influence, with similar values, across all models. 
+
+Moreover, a higher number of survivors is negatively related with child deaths and missing, which is expected. 
+
+Finally, the positive coefficient of `Drowning` indicates that incidents caused by drowning are positively associated with child deaths and missing, which is expected since drowning incidents usually involve larger groups of people.
+
 # Next Steps
 
-Aliquam sed faucibus risus, quis efficitur erat. Vestibulum semper mauris quis tempus eleifend. Aliquam sagittis dictum ipsum, quis viverra ligula eleifend ut. Curabitur sagittis vitae arcu eget faucibus. In non elementum felis. Duis et aliquam nunc. Nunc pulvinar sapien nunc, vel pretium nisi efficitur in. Fusce fringilla maximus leo et maximus. Fusce at ligula laoreet, iaculis mi at, auctor odio. Praesent sed elementum justo. Aenean consectetur risus rhoncus tincidunt efficitur. Praesent dictum mauris at diam maximus maximus [@R-posterdown].
+Further research could explore additional factors such as the role of smuggling networks and the degree of conflict in the countries of origin. Expanding the dataset with additional socioeconomic and political variables could provide further insights. 
+
+It would be interesting to control for the political regime and levels of corruption in the countries. Analyzing the different migration routes could also reveal important patterns not captured in this analysis.
 
 # Conclusion
 
-Try `posterdown` out! Hopefully you like it!
+Our analysis provides a comprehensive examination of factors influencing migrant deaths and disappearances. The visualization of temporal and geographical data reveals critical regions and time periods of high risk, while the econometric analysis highlights significant relationships between demographics, causes of death, and the number of child deaths and missing persons during migration incidents. 
 
-```{r, include=FALSE}
-knitr::write_bib(c('knitr','rmarkdown','posterdown','pagedown'), 'packages.bib')
-```
+Specifically, the significant impact of the number of female and male migrants, the negative impact of the number of survivors and the positive impact of drowning in incidents of death and missing children call for further investigation and targeted strategies. 
 
 # References
