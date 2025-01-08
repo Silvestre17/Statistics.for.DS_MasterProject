@@ -11,6 +11,21 @@
   justify-content: end !important;
 }
 
+.poster_body p {
+  margin-right: 4mm !important;
+  margin-left: 4mm !important;
+  margin-top: 4mm !important;
+  margin-bottom: 4mm !important;
+}
+
+.poster_body h2 {
+  margin-top: 0 !important;
+}
+
+a {
+  font-weight: bold;
+}
+
 a:link {
   color: #941a00 !important;
 }
@@ -39,7 +54,10 @@ code {
   font-size: 35px !important;
 }
 
-
+img {
+  margin-top: 0.2cm !important;
+  margin-bottom: 0 !important;
+}
 
 ::marker {
   font-weight: bold !important;
