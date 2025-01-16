@@ -243,14 +243,18 @@ The present study begins by illustrating the temporal and spatial distribution o
 
 # Methodology
 
-The current research reports data collected from the **Missing Migrants Project** [@IOM_MissingMigrants]for the period from $2014$ to $2024$, which resulted in $5,462$ entries after some preprocessing. Preprocessing involved the elimination of duplicates, filtering for high-quality source information, and the selection of relevant variables, identified through literature, theoretical considerations and variables available in the dataset. Furthermore, enrich the analysis with contextual factors such as country GDP and political regime. However, data on migrant populations within specific borders at given times, crucial for a robust analysis, proved challenging to obtain consistently across all regions and periods. 
+The current research reports data was collected from the **Missing Migrants Project** [@IOM_MissingMigrants] for the period from $2014$ to $2024$, which resulted in $5,462$ entries after some preprocessing. Preprocessing involved filtering for high-quality source information, and the selection of relevant variables, identified through literature, theoretical considerations and variables available in the dataset.
 
-We transformed our variables by using dummy variables for the `Cause of Death` and logarithmic transformations for non-normal distributions considering skewness and kurtosis analyses. Linear relationships were incorporated into the model due to theoretical reasoning and literature on the topic. For our analysis, we employed panel data regressions, analyzing `Pooled OLS`, `Fixed Effects`, and `Random Effects` models. Econometric tests (including `Breusch-Pagan` and `Hausman tests`) were conducted to determine which model was most appropriate for the data. This approach allows us to isolate key factors and provide insights to inform interventions aimed at preventing future incidents.
+We explored the possibility of merging our dataset with additional sources to enrich our analysis. However, due to the specific nature of the topic, no relevant complementary data was found.
+
+We transformed our variables by using dummy variables for the `Cause of Death` and logarithmic transformations for non-normal distributions considering skewness and kurtosis analyses, that demonstrated asymmetry and leptokurtic distribution. Linear relationships were incorporated into the model due to theoretical reasoning and literature on the topic.
+
+For our analysis, we employed panel data regressions, analyzing `Pooled OLS`, `Fixed Effects`, and `Random Effects` models. Econometric tests (including `Breusch-Pagan` and `Hausman tests`) were conducted to determine which model was most appropriate for the data. This approach allows us to isolate key factors and provide insights to inform interventions aimed at preventing future incidents.
 
 
 # Initial Analysis
 
-The polar charts (**Figure** \@ref(fig:polarcharts)) reveal notable temporal patterns. The number of deaths shows a general increase over the years, but a decrease in $2018$ and $2019$. The number of missing persons presents some oscillations, with peaks around $2016$ and $2023$. The number of documented incidents shows a steady increase until $2023$. Finally, the survivor counts show an overall increasing trend with a peak around $2016$.
+The polar charts (**Figure** \@ref(fig:polarcharts)) reveal notable temporal patterns. The number of deaths shows a general increase over the years, but a decrease in $2018$ and $2019$. The number of missing persons presents some oscillations, with peaks around $2016$ and $2023$. The number of documented incidents shows a steady increase until $2023$. Finally, the survivors count show an overall increasing trend with a peak around $2016$.
 
 ```{r polarcharts, echo=FALSE, fig.cap='<span class="caption-text">Polar Charts of Migrant Incidents Over Years. Distribution of Deaths, Missing, Survivors, and Incidents by Year.</span>', fig.height=6}
 # ------------------------------------
@@ -578,7 +582,7 @@ fixed_effects_robust
 
 # Results
 
-The panel data analysis investigates the factors influencing the number of deaths and missing children, controlling for **continent** and **time**. **Table** \@ref(tab:stattests) presents the results of key statistical tests, and **Table** \@ref(tab:modelresults) displays the estimation results for Robust Random Effects.
+The panel data analysis investigates the factors influencing the number of deaths and missing children, controlling for **continent** and **time**. **Table** \@ref(tab:stattests) presents the results of key statistical tests, and **Table** \@ref(tab:modelresults) displays the estimation results for `Robust Random Effects`.
 
 ```{r stattests}
 # Statistics Test Table
@@ -608,8 +612,7 @@ The **`Breusch-Pagan` tests**, regardless of the type of model used, suggest the
 
 **`Lagrange Multiplier` test** [@breusch1980lagrange] ($p$-value < $\alpha = 5\%$) supports that the **Random Effects** model is more appropriate than the **Pooled OLS** model. 
 
-For the **`Robust Hausman` test** performed, we obtained the p-value of $0.929$. This result suggests that the **`Fixed` and `Random Effects` Models** are consistent, but the only the latter is efficient.
-
+For the **`Robust Hausman` test** performed, we obtained the p-value of $0.929$. This result suggests that the **`Fixed Effects`** and **`Random Effects` Models** are consistent, but the only the latter is efficient.
 <br>
 
 ```{r modelresults}
@@ -649,22 +652,21 @@ knitr::kable(random_effects_robust_df,
 ```
 
 
+
 **Table** \@ref(tab:modelresults) presents the results from our **`Robust Random Effects`** model, which examines factors influencing child deaths or missing (D&M) in migrant incidents. Both `log(Number of Females)` and `log(Number of Males)` show positive coefficients, as an increase in overall D&M is expected to correlate with increased child D&M. However, the coefficient for `log(Number of Females)` is substantially larger ($0.275$) than that of `log(Number of Males)` ($0.069$), indicating a more pronounced effect. Specifically, a $1\%$ increase in the number of female D&M is associated with a $0.275\%$ increase in the number of children D&M. This suggests that women, often primary caregivers, may offer a higher degree of protection to children, and their deaths can subsequently elevate the risk for those children.
 
 Additionally, the `Drowning` dummy variable has a positive coefficient of $0.048$. This result indicates that, ceteris paribus, drowning incidents are associated with approximately a $4.92\%$ [$\left(e^{0.048} - 1\right) \times 100$] increase in the expected number of children D&M compared to other causes of death.
 
 # Conclusion
 
-Our analysis reveals critical patterns in migrant deaths and disappearances. Geographically, the Mediterranean, Central America, and the US-Mexico border are high-risk areas. 
+Our analysis highlights critical patterns in migrant deaths and disappearances, with high-risk areas including the Mediterranean, Central America, and the US-Mexico border. Peaks in incidents during $2016$ and $2023$, alongside rising survivor counts, suggest both increased risks and improved rescue efforts. However, regional data inconsistencies may obscure the full scope of the crisis.
 
-The panel data analysis highlights a strong link between the number of female fatalities, which revealed to be the biggest factor for child incidents in our study, and increased child deaths and disappearances, underscoring the vulnerability of women and children. Drowning incidents also significantly increase risks. 
+The panel data analysis shows a strong link between female fatalities and higher child deaths, emphasizing the vulnerability of women and children. Drowning incidents further elevate these risks.
 
 ## Next Steps
 
-Further research should investigate the role of smuggling networks and conflict levels in countries of origin, considering the implications for policy development. 
+Future research should explore the influence of smuggling networks and conflicts in migrants' countries of origin, incorporating data on conflict levels (e.g., number of attacks or deaths in armed conflicts) and the percentage of unaccompanied minors among migrants.
 
-Expanding data to include socioeconomic and political factors could provide additional context, while analysing specific migration routes might reveal further critical patterns. 
-
-Ultimately, these findings should guide the development of policies to protect migrant lives, particularly for vulnerable populations such as women and children.
+A more detailed analysis of specific migration routes could help identify localized patterns, guiding tailored interventions to protect vulnerable groups, especially women and children. Improved data standardization across regions is also crucial for accurately assessing the crisis and informing effective policies.
 
 # References
