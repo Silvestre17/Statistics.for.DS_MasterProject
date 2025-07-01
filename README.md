@@ -1,107 +1,112 @@
-# SfDS Project 24.25 - [Migration | R]
+# 🌍 Between Borders: An Econometric Analysis of Migrant Child Deaths & Disappearances 📊
 
-Work developed in the Statistics for Data Science course of the Master's in Data Science and Advanced Analytics at NOVA IMS.
+<p align="center">
+  <img src="https://missingmigrants.iom.int/sites/g/files/tmzbdl601/files/2021-07/dm-image.jpeg" alt="Between Borders Project Banner" width="100%">
+</p>
 
-> This project aims .....
+<p align="center">
+    <!-- Project Links -->
+    <a href="https://github.com/Silvestre17/Statistics.for.DS_MasterProject"><img src="https://img.shields.io/badge/Project_Repo-100000?style=for-the-badge&logo=github&logoColor=white" alt="GitHub Repo"></a>
+</p>
 
-<br>
+## 📝 Description
 
-#### Group [37]
+This project provides an in-depth **econometric panel data analysis** to investigate the factors influencing the deaths and disappearances of migrant children worldwide. Using a decade of data, we explore the temporal and spatial patterns of these tragic events and build a statistical model to identify key predictors, with the ultimate goal of informing policy and humanitarian interventions.
 
-  - André Silvestre, 20240502
-  - Umeima Mahomed, 20240543
+## ✨ Objective
 
+The primary research question driving this project is:
+> **What are the factors that influence the total number of deaths and missing children in migrant incidents across continents and time?**
 
-----
+To answer this, our objectives were to:
+*   Analyze the temporal and spatial distribution of migrant incidents.
+*   Specify and estimate an appropriate panel data regression model.
+*   Identify significant predictors of child deaths and disappearances.
+*   Provide data-driven insights to support policy interventions aimed at protecting vulnerable populations.
 
-<br><br>
+## 🎓 Project Context
 
-### Analysis of the Data Description and Variable Properties
+This project was developed for the **Statistics for Data Science** course in the **[Master's in Data Science and Advanced Analytics](https://www.novaims.unl.pt/en/education/programs/postgraduate-programs-and-master-degree-programs/master-degree-program-in-data-science-and-advanced-analytics-with-a-specialization-in-data-science/)** program at **NOVA IMS**. The work was completed during the **1st Semester** of the **2024/2025** academic year.
 
-Based on the provided summary, we can infer important characteristics of the **Missing Migrants Project dataset**. This analysis guides the formulation of research questions, considering the types of variables, the presence of missing data, imbalance, and the nature of the project requirements. Here's an overview:
+## 💾 Data Source
 
----
+The data was sourced from the **[Missing Migrants Project](https://missingmigrants.iom.int/data)**, an initiative by the **International Organization for Migration (IOM)**.
 
-### Key Characteristics of the Dataset:
-1. **Structure**:
-   - 17,474 rows and 25 columns.
-   - **16 character variables** (categorical or textual) and **9 numeric variables** (quantitative).
+*   **Dataset:** Contains **5,462 entries** of migrant incidents from **2014 to 2024**.
+*   **Scope:** The dataset includes detailed information on incident dates, locations, and the number of deceased, missing, and surviving individuals, including gender breakdowns.
 
-2. **Imbalance**:
-   - Numeric variables like **"Number of Dead"**, **"Minimum Estimated Number of Missing"**, and **"Number of Survivors"** are heavily skewed (most values near zero, with a few extreme outliers).
-   - The character variables (e.g., **"Region of Incident"**, **"Migration Route"**) have varying unique values, indicating potential sparsity or imbalance in their distributions.
+<p align="center">
+    <a href="https://www.iom.int/">
+        <img src="https://img.shields.io/badge/IOM-0033A0?style=for-the-badge&logo=iom&logoColor=white" alt="International Organization for Migration" />
+    </a>
+</p>
 
-3. **Missing Data**:
-   - Variables like **"Minimum Estimated Number of Missing"** (9.69% complete rate), **"Migration Route"** (85% complete rate), and **"Number of Survivors"** (15.8% complete rate) have substantial missingness, which could complicate analyses.
+## 🛠️ Technologies Used
 
-4. **Potential for Analysis**:
-   - **Continuous dependent variables**: **"Total Number of Dead and Missing"**, **"Number of Survivors"**, and potentially **"Number of Females/Males/Children"**.
-   - **Categorical predictors**: Region, route, causes of death, etc.
-   - Time-series aspects with **"Incident Year"**.
+The analysis and visualization for this project were conducted entirely within the **R** ecosystem.
 
----
-
-### Research Questions and Considerations
-
-#### **Cross-Sectional Data**
-Focus on a single snapshot or aggregation, exploring relationships without temporal trends.
-
-##### Possible Questions:
-1. **What factors influence the total number of deaths and missing persons in migration incidents?**
-   - Dependent Variable: **"Total Number of Dead and Missing"**.
-   - Independent Variables: **"Region of Incident"**, **"Cause of Death"**, **"Migration Route"**, **"Country of Incident"**.
-   - Justification: Identify high-risk regions and causes for policy recommendations.
-   - Challenges:
-     - Missing data in "Migration Route".
-     - Imbalance in deaths (most incidents have a small number of deaths).
-
-3. **Do regions with harsher causes of death (e.g., environmental factors) report higher survivor rates?**
-   - Dependent Variable: **"Number of Survivors"**.
-   - Independent Variables: **"Cause of Death"**, **"Region of Incident"**.
-   - Justification: Evaluate the survivability of incidents under extreme conditions.
-   - Challenges:
-     - Survivors are underreported (only 15.8% completeness).
-     - Survivors might not correlate with all causes of death.
+<p align="center">
+    <a href="https://www.r-project.org/">
+        <img src="https://img.shields.io/badge/R-276DC3?style=for-the-badge&logo=r&logoColor=white" alt="R" />
+    </a>
+    <a href="https://posit.co/products/enterprise/rmarkdown/">
+        <img src="https://img.shields.io/badge/R_Markdown-5178B8?style=for-the-badge&logo=r&logoColor=white" alt="R Markdown" />
+    </a>
+    <a href="https://www.tidyverse.org/">
+        <img src="https://img.shields.io/badge/Tidyverse-1E90FF?style=for-the-badge&logo=rstudio&logoColor=white" alt="Tidyverse" />
+    </a>
+     <a href="https://cran.r-project.org/web/packages/plm/index.html">
+        <img src="https://img.shields.io/badge/plm-0073B7?style=for-the-badge" alt="plm package" />
+    </a>
+</p>
 
 ---
 
-#### **Panel Data**
-Leverage the temporal aspect to analyze trends or causal relationships over time and across regions.
+## ⚙️ Methodology & Analytical Workflow
 
-##### Possible Questions:
-1. **How have the total deaths and missing persons changed over time in different regions?**
-   - Dependent Variable: **"Total Number of Dead and Missing"**.
-   - Independent Variables: **"Year"**, **"Region of Incident"**, **"Cause of Death"**.
-   - Justification: Identify regional patterns or trends for preventive measures.
-   - Challenges:
-     - Missingness and imbalance in certain regions or years.
+Our approach followed a structured econometric analysis process:
 
-2. **What is the temporal trend in incidents involving children across regions?**
-   - Dependent Variable: **"Number of Children"**.
-   - Independent Variables: **"Year"**, **"Region of Incident"**, **"Migration Route"**.
-   - Justification: Examine if risks to children have increased in certain routes over time.
-   - Challenges:
-     - Missingness and potential data sparsity for children.
+1.  **Data Preprocessing:**
+    *   Filtered the dataset for high-quality source information.
+    *   Transformed variables using **logarithmic transformations** to handle non-normal distributions and created **dummy variables** for categorical features like `Cause of Death`.
 
-3. **Has the quality of reporting (Source Quality) improved the completeness of data over time?**
-   - Dependent Variable: **"Source Quality"** (numeric rating).
-   - Independent Variables: **"Year"**, **"Region of Incident"**, **"Information Source"**.
-   - Justification: Understand if reporting efforts have enhanced data reliability.
-   - Challenges:
-     - Correlation between "Source Quality" and other variables might be weak.
+2.  **Initial Analysis & Visualization:**
+    *   Illustrated temporal trends using **polar charts** and geospatial patterns with an **animated global map**, identifying the Mediterranean Sea and Central America as critical high-risk zones.
+
+    <p align="center">
+      <img src="./img/Polar_Charts.png" alt="Polar Charts of Migrant Incidents" width="600">
+    </p>
+
+3.  **Econometric Modeling:**
+    *   **Model Selection:** We employed **Panel Data Regression** to control for both time and continent-specific effects. We compared **Pooled OLS**, **Fixed Effects (FE)**, and **Random Effects (RE)** models.
+    *   **Specification Tests:**
+        *   **Breusch-Pagan Test:** Confirmed the presence of **heteroskedasticity** (p-value < 0.05), necessitating the use of robust standard errors.
+        *   **Robust Hausman Test:** Yielded a p-value of 0.929, indicating that both Fixed and Random Effects models are consistent, but the **Random Effects model is more efficient**. This model was chosen for the final analysis.
 
 ---
 
-### Key Considerations for Model Selection:
-1. **Missing Data**:
-   - For substantial missingness (e.g., "Number of Survivors"), imputation or exclusion might be necessary.
-   - Analyze the patterns of missing data—e.g., is missingness systematic (related to regions or causes)?
+## 📈 Results & Key Findings
 
-2. **Imbalance**:
-   - Variables like "Number of Dead" and "Minimum Estimated Number of Missing" are highly skewed, requiring transformation (e.g., log transformation) or robust regression techniques.
+The **Robust Random Effects model** revealed several significant factors influencing the number of child deaths and disappearances (D&M):
 
-3. **Temporal Trends**:
-   - For panel data, fixed effects (FE) or random effects (RE) models can account for unobserved heterogeneity across regions or time.
+<p align="center">
+  <img src="./img/RandomEffectsModelResults.png" alt="Random Effects Model Results" width="600">
+</p>
 
-4. **Variable Interactions**:
-   - Consider potential interactions between predictors, e.g., the relationship between "Cause of Death" and "Region of Incident."
+*   **Impact of Female Fatalities:** Both `log(Number of Females)` and `log(Number of Males)` showed positive and significant coefficients. However, the coefficient for female D&M (**0.275**) is substantially larger than for male D&M (**0.069**). This suggests a 1% increase in female deaths is associated with a **0.275% increase** in child deaths, highlighting the critical role of women as primary caregivers.
+*   **Risk of Drowning:** The `Drowning` dummy variable was positive and significant, indicating that drowning incidents are associated with an **approximately 4.92% increase** in the expected number of child D&M compared to other causes of death.
+
+## 🏁 Conclusion & Next Steps
+
+Our analysis confirms that migrant deaths and disappearances are concentrated in high-risk regions and that the vulnerability of women is directly linked to an increased risk for children.
+
+**Future Research Directions:**
+*   Incorporate data on smuggling networks and conflict levels in countries of origin.
+*   Conduct a more granular analysis of specific migration routes to guide localized interventions.
+*   Advocate for improved data standardization across regions to enable more accurate and comprehensive crisis assessment.
+
+## 👥 Team Members
+
+*   **André Silvestre** (20240502)
+*   **Filipa Pereira** (20240509)
+*   **Umeima Mahomed** (20240543)
